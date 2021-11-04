@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites disabled="0" errors="1" failures="0" tests="1" time="0">
+<testsuite disabled="0" errors="1" failures="0" name="Arith" skipped="0" tests="1" time="0">
+<properties>
+<property name="os" value="posix"/>
+</properties>
+<testcase classname="Arith" name="default" status="ERROR" time="0">
+<error message="ERROR" type="ERROR"/>
+<system-out>SBY 16:38:22 [Arith] Removing directory '/home/nhat/Documents/Code/BPU/Bias_Free_Neural_Predictor/Arith'.
+SBY 16:38:22 [Arith] Copy '/home/nhat/Documents/Code/BPU/Bias_Free_Neural_Predictor/Arith.sv' to '/home/nhat/Documents/Code/BPU/Bias_Free_Neural_Predictor/Arith/src/Arith.sv'.
+SBY 16:38:22 [Arith] engine_0: smtbmc
+SBY 16:38:22 [Arith] base: starting process &quot;cd Arith/src; yosys -ql ../model/design.log ../model/design.ys&quot;
+SBY 16:38:22 [Arith] base: Arith.sv:87: ERROR: syntax error, unexpected '+', expecting '}'
+SBY 16:38:22 [Arith] base: finished (returncode=1)
+SBY 16:38:22 [Arith] base: job failed. ERROR.
+SBY 16:38:22 [Arith] summary: Elapsed clock time [H:MM:SS (secs)]: 0:00:00 (0)
+SBY 16:38:22 [Arith] summary: Elapsed process time [H:MM:SS (secs)]: 0:00:00 (0)
+SBY 16:38:22 [Arith] DONE (ERROR, rc=16)
+</system-out></testcase></testsuite></testsuites>
