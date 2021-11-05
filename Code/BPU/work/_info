@@ -1,0 +1,1076 @@
+m255
+K4
+z2
+!s11f MIXED_VERSIONS
+13
+!s112 1.1
+!i10d 8192
+!i10e 25
+!i10f 100
+cModel Technology
+d/home/nhat/intelFPGA_lite/20.1/modelsim_ase/bin
+vBF_neural_predictor
+Z0 DXx6 sv_std 3 std 0 22 VYECXdT12H8WgbUP_5Y6:3
+Z1 !s110 1636133675
+!i10b 1
+!s100 ABBia>WN1L^^lObDa8X8Z3
+Z2 !s11b Dg1SIo80bB@j0V0VzS_@n1
+IPJg[a:2VVehWU<W3B_>^31
+Z3 VDg1SIo80bB@j0V0VzS_@n1
+S1
+Z4 d/home/nhat/Documents/Code/BPU
+w1636133520
+8/home/nhat/Documents/Code/BPU/Bias_Free_Neural_Predictor/BFNP.sv
+F/home/nhat/Documents/Code/BPU/Bias_Free_Neural_Predictor/BFNP.sv
+!i122 543
+L0 1 123
+Z5 OV;L;2020.1;71
+r1
+!s85 0
+31
+!s108 1636133675.000000
+!s107 /home/nhat/Documents/Code/BPU/Bias_Free_Neural_Predictor/BFNP.sv|
+!s90 -reportprogress|300|-work|work|-sv|-stats=none|/home/nhat/Documents/Code/BPU/Bias_Free_Neural_Predictor/BFNP.sv|
+!i113 1
+Z6 o-work work -sv
+Z7 tCvgOpt 0
+n@b@f_neural_predictor
+vBias_dec
+R0
+R1
+!i10b 1
+!s100 ?4?5DG>Ihf20``e`cII<C1
+R2
+I5L6S`nY@Ykf_R8GmJe5[g0
+R3
+S1
+R4
+Z8 w1636123358
+Z9 8/home/nhat/Documents/Code/BPU/Bias_Free_Neural_Predictor/Update_component.sv
+Z10 F/home/nhat/Documents/Code/BPU/Bias_Free_Neural_Predictor/Update_component.sv
+!i122 542
+L0 87 17
+R5
+r1
+!s85 0
+31
+Z11 !s108 1636133674.000000
+Z12 !s107 /home/nhat/Documents/Code/BPU/Bias_Free_Neural_Predictor/Update_component.sv|
+Z13 !s90 -reportprogress|300|-work|work|-sv|-stats=none|/home/nhat/Documents/Code/BPU/Bias_Free_Neural_Predictor/Update_component.sv|
+!i113 1
+R6
+R7
+n@bias_dec
+vBias_inc
+R0
+R1
+!i10b 1
+!s100 >BI`;2JoWdlm<l@1o@A8G1
+R2
+IHl7BzH27oINA`]3i70[Ck1
+R3
+S1
+R4
+R8
+R9
+R10
+!i122 542
+L0 69 17
+R5
+r1
+!s85 0
+31
+R11
+R12
+R13
+!i113 1
+R6
+R7
+n@bias_inc
+vBias_update
+R0
+R1
+!i10b 1
+!s100 ;oA;8K@iZSo81V0zhi]^81
+R2
+InH_>HAN7XT_oW9OV?FA^E1
+R3
+S1
+R4
+R8
+R9
+R10
+!i122 542
+L0 49 19
+R5
+r1
+!s85 0
+31
+R11
+R12
+R13
+!i113 1
+R6
+R7
+n@bias_update
+vBias_weigth_table
+R0
+Z14 !s110 1636133674
+!i10b 1
+!s100 WIGOf:gda27kK5iRG:mC^0
+R2
+IU]?^]eg7201aU25mYWjaU1
+R3
+S1
+R4
+Z15 w1636119161
+Z16 8/home/nhat/Documents/Code/BPU/Bias_Free_Neural_Predictor/Bias_weight_table.sv
+Z17 F/home/nhat/Documents/Code/BPU/Bias_Free_Neural_Predictor/Bias_weight_table.sv
+!i122 535
+L0 1 26
+R5
+r1
+!s85 0
+31
+R11
+Z18 !s107 /home/nhat/Documents/Code/BPU/Bias_Free_Neural_Predictor/Bias_weight_table.sv|
+Z19 !s90 -reportprogress|300|-work|work|-sv|-stats=none|/home/nhat/Documents/Code/BPU/Bias_Free_Neural_Predictor/Bias_weight_table.sv|
+!i113 1
+R6
+R7
+n@bias_weigth_table
+vBranch_address_folded_hist_reg_pos_BF
+R0
+R14
+!i10b 1
+!s100 N`VCk7j2n4a>?d>fTJKA:1
+R2
+I[O_bTceTmni?l;h1F05<Y2
+R3
+S1
+R4
+Z20 w1636131071
+Z21 8/home/nhat/Documents/Code/BPU/Bias_Free_Neural_Predictor/Register_index_BF.sv
+Z22 F/home/nhat/Documents/Code/BPU/Bias_Free_Neural_Predictor/Register_index_BF.sv
+!i122 541
+L0 1 89
+R5
+r1
+!s85 0
+31
+R11
+Z23 !s107 /home/nhat/Documents/Code/BPU/Bias_Free_Neural_Predictor/Register_index_BF.sv|
+Z24 !s90 -reportprogress|300|-work|work|-sv|-stats=none|/home/nhat/Documents/Code/BPU/Bias_Free_Neural_Predictor/Register_index_BF.sv|
+!i113 1
+R6
+R7
+n@branch_address_folded_hist_reg_pos_@b@f
+vBranch_address_reg
+R0
+R14
+!i10b 1
+!s100 0mH>o8hYbKBON?TODVR6J1
+R2
+IfIRIaH_lADd@I>OP@f9?_2
+R3
+S1
+R4
+Z25 w1636130222
+Z26 8/home/nhat/Documents/Code/BPU/Bias_Free_Neural_Predictor/Register_index.sv
+Z27 F/home/nhat/Documents/Code/BPU/Bias_Free_Neural_Predictor/Register_index.sv
+!i122 540
+L0 1 27
+R5
+r1
+!s85 0
+31
+R11
+Z28 !s107 /home/nhat/Documents/Code/BPU/Bias_Free_Neural_Predictor/Register_index.sv|
+Z29 !s90 -reportprogress|300|-work|work|-sv|-stats=none|/home/nhat/Documents/Code/BPU/Bias_Free_Neural_Predictor/Register_index.sv|
+!i113 1
+R6
+R7
+n@branch_address_reg
+vBranch_status_table
+R0
+R14
+!i10b 1
+!s100 K5dX`kYbRESQ7<CJYWXR^2
+R2
+IYcEoFKSWM0DO_`2V1bH;L3
+R3
+S1
+R4
+Z30 w1636132647
+Z31 8/home/nhat/Documents/Code/BPU/Bias_Free_Neural_Predictor/Branch_status_table.sv
+Z32 F/home/nhat/Documents/Code/BPU/Bias_Free_Neural_Predictor/Branch_status_table.sv
+!i122 536
+L0 1 58
+R5
+r1
+!s85 0
+31
+R11
+Z33 !s107 /home/nhat/Documents/Code/BPU/Bias_Free_Neural_Predictor/Branch_status_table.sv|
+Z34 !s90 -reportprogress|300|-work|work|-sv|-stats=none|/home/nhat/Documents/Code/BPU/Bias_Free_Neural_Predictor/Branch_status_table.sv|
+!i113 1
+R6
+R7
+n@branch_status_table
+vBST_update
+R0
+R1
+!i10b 1
+!s100 h<@I<NEN5EGhb`7Ce^oQ=0
+R2
+IF]lG^DZR]2k`Z2kI=9NL51
+R3
+S1
+R4
+R8
+R9
+R10
+!i122 542
+L0 1 47
+R5
+r1
+!s85 0
+31
+R11
+R12
+R13
+!i113 1
+R6
+R7
+n@b@s@t_update
+vD_flip_flop
+R0
+R14
+!i10b 1
+!s100 bDJeU7eQX1lMcMNQV]biN0
+R2
+IE]S<IkXCCbz?9aDCZM7WA3
+R3
+S1
+R4
+R20
+R21
+R22
+!i122 541
+L0 202 25
+R5
+r1
+!s85 0
+31
+R11
+R23
+R24
+!i113 1
+R6
+R7
+n@d_flip_flop
+vFolded_hist_reg
+R0
+R14
+!i10b 1
+!s100 L=`BU@B3PjG6JYUTiOI:l1
+R2
+I8obKKniZUE0X:ZNTAE1WZ3
+R3
+S1
+R4
+R25
+R26
+R27
+!i122 540
+L0 29 27
+R5
+r1
+!s85 0
+31
+R11
+R28
+R29
+!i113 1
+R6
+R7
+n@folded_hist_reg
+vFull_adder_9_bit
+R0
+R14
+!i10b 1
+!s100 d^5^XC5l_]ezg5<adCi722
+R2
+IiCW<7dj`S7SEe`GDgT>n[3
+R3
+S1
+R4
+Z35 w1636123060
+Z36 8/home/nhat/Documents/Code/BPU/Bias_Free_Neural_Predictor/Arith.sv
+Z37 F/home/nhat/Documents/Code/BPU/Bias_Free_Neural_Predictor/Arith.sv
+!i122 534
+L0 137 9
+R5
+r1
+!s85 0
+31
+R11
+Z38 !s107 /home/nhat/Documents/Code/BPU/Bias_Free_Neural_Predictor/Arith.sv|
+Z39 !s90 -reportprogress|300|-work|work|-sv|-stats=none|/home/nhat/Documents/Code/BPU/Bias_Free_Neural_Predictor/Arith.sv|
+!i113 1
+R6
+R7
+n@full_adder_9_bit
+vindex_perceptron
+R0
+R14
+!i10b 1
+!s100 <ngF?j4_8S`Y83>RzgicD3
+R2
+IlZDKWnAHDhHR_g`mhFTC42
+R3
+S1
+R4
+Z40 w1636089666
+Z41 8/home/nhat/Documents/Code/BPU/Bias_Free_Neural_Predictor/Index_perceptron.sv
+Z42 F/home/nhat/Documents/Code/BPU/Bias_Free_Neural_Predictor/Index_perceptron.sv
+!i122 538
+L0 1 23
+R5
+r1
+!s85 0
+31
+R11
+Z43 !s107 /home/nhat/Documents/Code/BPU/Bias_Free_Neural_Predictor/Index_perceptron.sv|
+Z44 !s90 -reportprogress|300|-work|work|-sv|-stats=none|/home/nhat/Documents/Code/BPU/Bias_Free_Neural_Predictor/Index_perceptron.sv|
+!i113 1
+R6
+R7
+vindex_perceptron_BF
+R0
+R14
+!i10b 1
+!s100 8F_Z3K231DmCf@oWOlmGF3
+R2
+I_jQ@<^hUC<jTY90dOalbL3
+R3
+S1
+R4
+R40
+R41
+R42
+!i122 538
+L0 25 40
+R5
+r1
+!s85 0
+31
+R11
+R43
+R44
+!i113 1
+R6
+R7
+nindex_perceptron_@b@f
+vMul_perceptron_GHR
+R0
+R14
+!i10b 1
+!s100 _F9>1>eY[h4B1<WZ01DWk2
+R2
+I=VCYdAITIhHA9YOajhXLz1
+R3
+S1
+R4
+R35
+R36
+R37
+!i122 534
+L0 102 17
+R5
+r1
+!s85 0
+31
+R11
+R38
+R39
+!i113 1
+R6
+R7
+n@mul_perceptron_@g@h@r
+vMul_perceptron_RS_H
+R0
+R14
+!i10b 1
+!s100 82]3CJXVB6[WfeLIi]And1
+R2
+IdNcY5`nal0jQaRXZ7SO>P3
+R3
+S1
+R4
+R35
+R36
+R37
+!i122 534
+L0 120 16
+R5
+r1
+!s85 0
+31
+R11
+R38
+R39
+!i113 1
+R6
+R7
+n@mul_perceptron_@r@s_@h
+vMux_prediction
+R0
+R14
+!i10b 1
+!s100 IDj:T2dIPJIk6c>]J_IY23
+R2
+IToDjWkCVlT^zRK`K39dk]3
+R3
+S1
+R4
+R35
+R36
+R37
+!i122 534
+L0 147 20
+R5
+r1
+!s85 0
+31
+R11
+R38
+R39
+!i113 1
+R6
+R7
+n@mux_prediction
+vMux_prediction_address
+R0
+R14
+!i10b 1
+!s100 [^oGf^AN[Y=UfC?=lIJSE2
+R2
+I4O71XE:H3oi4UliW92kze1
+R3
+S1
+R4
+R30
+R31
+R32
+!i122 536
+L0 83 14
+R5
+r1
+!s85 0
+31
+R11
+R33
+R34
+!i113 1
+R6
+R7
+n@mux_prediction_address
+vPC_comparator
+R0
+R14
+!i10b 1
+!s100 RZC:WZ=WR[LMFe0_cM9J^3
+R2
+Id3^8KF:N8ZNd]DV^:977D2
+R3
+S1
+R4
+R20
+R21
+R22
+!i122 541
+L0 182 18
+R5
+r1
+!s85 0
+31
+R11
+R23
+R24
+!i113 1
+R6
+R7
+n@p@c_comparator
+vPerceptron_add
+R0
+R14
+!i10b 1
+!s100 O;8XTToN8XS5hFGOMX`VO2
+R2
+IF`4;Q?_23W68gG6eOOiN42
+R3
+S1
+R4
+R35
+R36
+R37
+!i122 534
+L0 1 99
+R5
+r1
+!s85 0
+31
+R11
+R38
+R39
+!i113 1
+R6
+R7
+n@perceptron_add
+vPerceptron_table
+R0
+R14
+!i10b 1
+!s100 D^AS7dB10Z@>Cf094Y`@S1
+R2
+IXA4cbU`WizoOHz5[nXSM70
+R3
+S1
+R4
+Z45 w1636120568
+Z46 8/home/nhat/Documents/Code/BPU/Bias_Free_Neural_Predictor/Perceptron_table.sv
+Z47 F/home/nhat/Documents/Code/BPU/Bias_Free_Neural_Predictor/Perceptron_table.sv
+!i122 537
+Z48 L0 1 37
+R5
+r1
+!s85 0
+31
+R11
+Z49 !s107 /home/nhat/Documents/Code/BPU/Bias_Free_Neural_Predictor/Perceptron_table.sv|
+Z50 !s90 -reportprogress|300|-work|work|-sv|-stats=none|/home/nhat/Documents/Code/BPU/Bias_Free_Neural_Predictor/Perceptron_table.sv|
+!i113 1
+R6
+R7
+n@perceptron_table
+vPerceptron_table_BF
+R0
+R14
+!i10b 1
+!s100 Z^KOKd1OD82Y26c]GW<532
+R2
+I9hj<4:TFGVY5U2LO_njL[1
+R3
+S1
+R4
+Z51 w1636086092
+Z52 8/home/nhat/Documents/Code/BPU/Bias_Free_Neural_Predictor/Perceptron_table_BF.sv
+Z53 F/home/nhat/Documents/Code/BPU/Bias_Free_Neural_Predictor/Perceptron_table_BF.sv
+!i122 539
+R48
+R5
+r1
+!s85 0
+31
+R11
+Z54 !s107 /home/nhat/Documents/Code/BPU/Bias_Free_Neural_Predictor/Perceptron_table_BF.sv|
+Z55 !s90 -reportprogress|300|-work|work|-sv|-stats=none|/home/nhat/Documents/Code/BPU/Bias_Free_Neural_Predictor/Perceptron_table_BF.sv|
+!i113 1
+R6
+R7
+n@perceptron_table_@b@f
+vPerceptron_update
+R0
+R1
+!i10b 1
+!s100 D`ImPDEh7iBXSX3o7FJC83
+R2
+IHXWJLWHCZ;[JB>5e_Oc:R1
+R3
+S1
+R4
+R8
+R9
+R10
+!i122 542
+L0 105 27
+R5
+r1
+!s85 0
+31
+R11
+R12
+R13
+!i113 1
+R6
+R7
+n@perceptron_update
+vPerceptron_update_BF
+R0
+R1
+!i10b 1
+!s100 6ViNm;XBQ1>zWOCGOQ=BI1
+R2
+I1DlDGd<zhTghfL^@W5nCO1
+R3
+S1
+R4
+R8
+R9
+R10
+!i122 542
+L0 133 27
+R5
+r1
+!s85 0
+31
+R11
+R12
+R13
+!i113 1
+R6
+R7
+n@perceptron_update_@b@f
+vRecency_stack
+R0
+R14
+!i10b 1
+!s100 >kk80QK3z79VlEdVA<T3:3
+R2
+IeM;VMh8Tg^0OD@N78T3CV2
+R3
+S1
+R4
+R20
+R21
+R22
+!i122 541
+L0 156 24
+R5
+r1
+!s85 0
+31
+R11
+R23
+R24
+!i113 1
+R6
+R7
+n@recency_stack
+vRecency_stack_branch
+R0
+R14
+!i10b 1
+!s100 79RfTNbJn=R:;g?Hgi<Y>0
+R2
+I[:NzP4C<7j;a37I0L1kzh1
+R3
+S1
+R4
+R20
+R21
+R22
+!i122 541
+L0 91 28
+R5
+r1
+!s85 0
+31
+R11
+R23
+R24
+!i113 1
+R6
+R7
+n@recency_stack_branch
+vRecency_stack_pos
+R0
+R14
+!i10b 1
+!s100 <Z^nzUZg`A<ES>d_kd@1;3
+R2
+IV?I4mgikGA<ePVIS]g?id0
+R3
+S1
+R4
+R20
+R21
+R22
+!i122 541
+L0 119 36
+R5
+r1
+!s85 0
+31
+R11
+R23
+R24
+!i113 1
+R6
+R7
+n@recency_stack_pos
+vSr_Bias_index
+R0
+Z56 !s110 1635932262
+!i10b 1
+!s100 D7Ki6:lCDffP80NQHU1C00
+R2
+I0bTRgcJoTKhi@e=V4Ti`@2
+R3
+S1
+R4
+w1635931660
+R16
+R17
+!i122 83
+L0 30 19
+R5
+r1
+!s85 0
+31
+Z57 !s108 1635932262.000000
+R18
+R19
+!i113 1
+R6
+R7
+n@sr_@bias_index
+vSr_Bias_weight
+R0
+R14
+!i10b 1
+!s100 Sj4^HlfSCOE[_@h73GL2X0
+R2
+IzOeWXB?[zhV461Mnj1D4W2
+R3
+S1
+R4
+R15
+R16
+R17
+!i122 535
+L0 29 15
+R5
+r1
+!s85 0
+31
+R11
+R18
+R19
+!i113 1
+R6
+R7
+n@sr_@bias_weight
+vSr_BST_index
+R0
+R56
+!i10b 1
+!s100 M^D8A>CUWJIzj7e0o2hV@2
+R2
+IlW6GY2<93CKIEiF9F^S8?3
+R3
+S1
+R4
+w1635931480
+R31
+R32
+!i122 84
+L0 74 17
+R5
+r1
+!s85 0
+31
+R57
+R33
+R34
+!i113 1
+R6
+R7
+n@sr_@b@s@t_index
+vSr_BST_status_address
+R0
+R14
+!i10b 1
+!s100 doJNPc<bEV:glSKP8Me=;0
+R2
+IXiH80U4@FdPi28PM@X7:V1
+R3
+S1
+R4
+R30
+R31
+R32
+!i122 536
+L0 60 21
+R5
+r1
+!s85 0
+31
+R11
+R33
+R34
+!i113 1
+R6
+R7
+n@sr_@b@s@t_status_address
+vSr_BST_status_PC_in
+R0
+!s110 1636117697
+!i10b 1
+!s100 U8X39ZbCE]mn2P@fA4beR1
+R2
+I21BN?61BY9doG7[DDbTCe1
+R3
+S1
+R4
+w1636117692
+R31
+R32
+!i122 345
+L0 84 15
+R5
+r1
+!s85 0
+31
+!s108 1636117697.000000
+R33
+R34
+!i113 1
+R6
+R7
+n@sr_@b@s@t_status_@p@c_in
+vSr_PC_in
+R0
+R14
+!i10b 1
+!s100 E[ML4dKm05SNQ55O:<:dW0
+R2
+IZZf>F;K4EbCTnB<zzmPF60
+R3
+S1
+R4
+R30
+R31
+R32
+!i122 536
+L0 97 15
+R5
+r1
+!s85 0
+31
+R11
+R33
+R34
+!i113 1
+R6
+R7
+n@sr_@p@c_in
+vSr_perceptron_address
+R0
+R14
+!i10b 1
+!s100 f2l=8NiB8[SjSbEENho5z0
+R2
+I]cojCP[[J<6;6ohj?UPL<2
+R3
+S1
+R4
+R45
+R46
+R47
+!i122 537
+Z58 L0 39 15
+R5
+r1
+!s85 0
+31
+R11
+R49
+R50
+!i113 1
+R6
+R7
+n@sr_perceptron_address
+vSr_perceptron_address_BF
+R0
+R14
+!i10b 1
+!s100 hl1JRz;igDBXl03c8ZGmb1
+R2
+IV?8eLdT]ziY<cjMe>J]aa3
+R3
+S1
+R4
+R51
+R52
+R53
+!i122 539
+R58
+R5
+r1
+!s85 0
+31
+R11
+R54
+R55
+!i113 1
+R6
+R7
+n@sr_perceptron_address_@b@f
+vSr_perceptron_weight
+R0
+R14
+!i10b 1
+!s100 6@kYT3QmoRMoBJAD<Im5?3
+R2
+If`?P7QC<VHlMm;iF^GOe53
+R3
+S1
+R4
+R45
+R46
+R47
+!i122 537
+L0 55 15
+R5
+r1
+!s85 0
+31
+R11
+R49
+R50
+!i113 1
+R6
+R7
+n@sr_perceptron_weight
+vSr_perceptron_weight_BF
+R0
+R14
+!i10b 1
+!s100 L3QGj562oo5POXOVdhCii3
+R2
+IFBdOXY;22icc4k_R8`P`?3
+R3
+S1
+R4
+R51
+R52
+R53
+!i122 539
+L0 55 16
+R5
+r1
+!s85 0
+31
+R11
+R54
+R55
+!i113 1
+R6
+R7
+n@sr_perceptron_weight_@b@f
+vSr_prediction
+R0
+R14
+!i10b 1
+!s100 WU[9^XEGeKNULdBid1DGl0
+R2
+IhZ5Cj8EVlfc0F6b7U]9T=2
+R3
+S1
+R4
+R35
+R36
+R37
+!i122 534
+L0 184 15
+R5
+r1
+!s85 0
+31
+R11
+R38
+R39
+!i113 1
+R6
+R7
+n@sr_prediction
+vSr_total_weights
+R0
+R14
+!i10b 1
+!s100 78MAIo?Hc1b3Y3S@bVY>d0
+R2
+IMGJLX253UnM^:JemHoLRX1
+R3
+S1
+R4
+R35
+R36
+R37
+!i122 534
+L0 168 15
+R5
+r1
+!s85 0
+31
+R11
+R38
+R39
+!i113 1
+R6
+R7
+n@sr_total_weights
+vWeight_dec
+R0
+R1
+!i10b 1
+!s100 6dWL<=e3mGCQ`^8fl`cHk3
+R2
+IhI84A?=`5R7ZiS5Pfkj^h3
+R3
+S1
+R4
+R8
+R9
+R10
+!i122 542
+L0 182 19
+R5
+r1
+!s85 0
+31
+R11
+R12
+R13
+!i113 1
+R6
+R7
+n@weight_dec
+vWeight_inc
+R0
+R1
+!i10b 1
+!s100 Mh<;:8VeRgjLkNE>jiWYf2
+R2
+IJ=O:P80zfMKDf[VJP@:oH3
+R3
+S1
+R4
+R8
+R9
+R10
+!i122 542
+L0 162 19
+R5
+r1
+!s85 0
+31
+R11
+R12
+R13
+!i113 1
+R6
+R7
+n@weight_inc
