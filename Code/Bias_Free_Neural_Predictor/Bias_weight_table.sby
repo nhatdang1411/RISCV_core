@@ -1,0 +1,11 @@
+[options] 
+mode prove
+depth 10
+[engines]
+smtbmc
+[script]
+read -formal -sv Bias_weight_table.sv
+prep -top Bias_weight_table
+opt_merge -share_all
+[files] 
+Bias_weight_table.sv

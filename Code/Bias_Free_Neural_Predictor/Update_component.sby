@@ -1,0 +1,12 @@
+[options]
+mode bmc
+depth 10
+[engines]
+smtbmc 
+[script]
+read -formal -sv Update_component.sv
+prep -top  Bias_dec
+opt_merge -share_all
+[files]
+Update_component.sv
+

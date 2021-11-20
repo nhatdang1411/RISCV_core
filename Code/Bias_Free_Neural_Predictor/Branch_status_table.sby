@@ -1,0 +1,11 @@
+[options]
+mode bmc
+depth 10
+[engines] 
+smtbmc
+[script]
+read -formal -sv Branch_status_table.sv
+prep -top Sr_BST_status_address
+opt_merge -share_all
+[files]
+Branch_status_table.sv

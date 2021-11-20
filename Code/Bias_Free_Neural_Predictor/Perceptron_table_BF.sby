@@ -1,0 +1,12 @@
+[options]
+mode bmc
+depth 20
+[engines]
+smtbmc
+[script]
+read -formal -sv Perceptron_table_BF.sv
+prep -top  Perceptron_table_BF
+opt_merge -share_all
+[files]
+Perceptron_table_BF.sv
+

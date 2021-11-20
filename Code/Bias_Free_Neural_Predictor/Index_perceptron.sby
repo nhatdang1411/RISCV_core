@@ -1,0 +1,12 @@
+[options]
+mode bmc
+depth 10
+[engines]
+smtbmc
+[script]
+read -formal -sv Index_perceptron.sv
+prep -top  index_perceptron_BF
+opt_merge -share_all
+[files]
+Index_perceptron.sv
+
