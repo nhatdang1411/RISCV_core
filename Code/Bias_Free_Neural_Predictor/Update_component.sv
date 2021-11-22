@@ -29,7 +29,7 @@ module BST_update #(parameter theta = 4)
 			status_update[2] = ~Branch_direction;
 		end
 		else if ( (old_status!=3) && (Branch_prediction == Branch_direction) && (PC_predict == PC_actual)) begin
-			en_2_temp = 1;
+			en_2_temp = 0;
 			en_3_temp = 0;
 			status_update = old_status;
 		end

@@ -116,17 +116,19 @@ module BF_neural_predictor ;
 
 	//Register index
 	wire [160:1] Branch_address_iterative;
+	wire en_2_miss;
+	assign en_2_miss = en_2 | en_1;
 
-	Branch_address_reg Branch_address_reg ( .Branch_address_iterative(Branch_address_iterative), .Branch_address_update_iterative(PC_predict_IF[10:1]), .Branch_address_update(PC_actual[10:1]), .clk(clk), .en_1(status[1]|status[2]), .en_2(en_2_reg), .rst(rst));
+	Branch_address_reg Branch_address_reg ( .Branch_address_iterative(Branch_address_iterative), .Branch_address_update_iterative(PC_predict_IF[10:1]), .Branch_address_update(PC_actual[10:1]), .clk(clk), .en_1(status[1]|status[2]), .en_2(en_2_reg), .en_2_miss(en_2_miss), .rst(rst));
 
-	wire [160:1] Folded_hist_iterative;
-	Folded_hist_reg Folded_hist_reg ( .Folded_hist_iterative(Folded_hist_iterative), .Folded_hist_update_iterative(prediction), .Folded_hist_update(Branch_direction), .clk(clk), .en_1(status[1]|status[2]), .en_2(en_2_reg), .rst(rst));
+	wire [160:1] Folded_hist_iterative,Folded_hist_true_1;
+	Folded_hist_reg Folded_hist_reg ( .Folded_hist_iterative(Folded_hist_iterative), .Folded_hist_update_iterative(prediction), .Folded_hist_update(Branch_direction), .clk(clk), .en_1(status[1]|status[2]), .en_2(en_2_reg), .en_2_miss(en_2_miss), .rst(rst), .Folded_hist_true_1(Folded_hist_true_1));
 
 	//Register_index_BF
 	wire [16:1] Stack_branch_iterative [48:1];
 	wire [48:1] Folded_hist_iterative_BF;
 	wire [6:1] Pos_iterative[48:1];
-	Branch_address_folded_hist_reg_pos_BF Branch_address_folded_hist_reg_pos_BF( .Stack_branch_iterative(Stack_branch_iterative), .Branch_address_update_iterative(PC_predict_IF[16:1]), .Branch_address_update(PC_actual[16:1]), .clk(clk), .en_1(status[1]&status[2]), .en_2(en_2_reg_BF), .Folded_hist_iterative(Folded_hist_iterative_BF), .Folded_hist_update_iterative(prediction), .Folded_hist_update(Branch_direction), .Pos_iterative(Pos_iterative), .Pos_update_iterative(6'd0), .Pos_update(6'd0), .rst(rst));
+	Branch_address_folded_hist_reg_pos_BF Branch_address_folded_hist_reg_pos_BF( .Stack_branch_iterative(Stack_branch_iterative), .Branch_address_update_iterative(PC_predict_IF[16:1]), .Branch_address_update(PC_actual[16:1]), .clk(clk), .en_1(status[1]&status[2]), .en_2(en_2_reg_BF), .Folded_hist_iterative(Folded_hist_iterative_BF), .Folded_hist_update_iterative(prediction), .Folded_hist_update(Branch_direction), .Pos_iterative(Pos_iterative), .Pos_update_iterative(6'd0), .Pos_update(6'd0), .en_2_miss(en_2), .rst(rst));
 	
 	//Index_perceptron
 	
@@ -238,17 +240,41 @@ module BF_neural_predictor ;
 		inst<=32'h00000033;
 		PC_in <= 16;
 		#40
-		PC_actual <=6;
-		PC_alu <=6;
-		Branch_direction<=1'b0;
-		inst<=32'h00000033;
+		PC_actual <=8;
+		PC_alu <=8;
+		Branch_direction<=1'b1;
+		inst<=32'h00000063;
 		PC_in <= 20;
 		#40
 		PC_actual <=8;
 		PC_alu <=20;
 		Branch_direction<=1'b0;
 		inst<=32'h00000063;
-		PC_in <= 24;
+		PC_in <= 8;
+		#40
+		PC_actual <=2;
+		PC_alu <=2;
+		Branch_direction<=1'b0;
+		inst<=32'h00000033;
+		PC_in <= 8;
+		#40
+		PC_actual <=2;
+		PC_alu <=2;
+		Branch_direction<=1'b0;
+		inst<=32'h00000033;
+		PC_in <= 12;
+		#40
+		PC_actual <=2;
+		PC_alu <=2;
+		Branch_direction<=1'b0;
+		inst<=32'h00000033;
+		PC_in <= 16;
+		#40
+		PC_actual <=2;
+		PC_alu <=2;
+		Branch_direction<=1'b0;
+		inst<=32'h00000063;
+		PC_in <= 20;
 		#40
 		PC_actual <=2;
 		PC_alu <=2;
@@ -265,20 +291,20 @@ module BF_neural_predictor ;
 		PC_actual <=2;
 		PC_alu <=2;
 		Branch_direction<=1'b0;
+		inst<=32'h00000063;
+		PC_in <= 20;
+		#40
+		PC_actual <=2;
+		PC_alu <=2;
+		Branch_direction<=1'b0;
 		inst<=32'h00000033;
 		PC_in <= 20;
 		#40
 		PC_actual <=2;
 		PC_alu <=2;
 		Branch_direction<=1'b0;
-		inst<=32'h00000063;
-		PC_in <= 8;
-		#40
-		PC_actual <=2;
-		PC_alu <=2;
-		Branch_direction<=1'b0;
 		inst<=32'h00000033;
-		PC_in <= 8;
+		PC_in <= 24;
 	end	
 endmodule
 

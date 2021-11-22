@@ -7,7 +7,7 @@ module Branch_address_folded_hist_reg_pos_BF
 	input wire [16:1] Branch_address_update,
 	//Common signal
 	input wire clk, rst,
-	input wire  en_1, en_2,
+	input wire  en_1, en_2, en_2_miss,
 	//Folded Hist
 	output wire [48:1] Folded_hist_iterative,
 	
@@ -25,6 +25,7 @@ module Branch_address_folded_hist_reg_pos_BF
 	wire [16:1] Stack_branch_true [48:1];	
 	wire [48:1] signal_clk, signal_clk_2;	//output of PC comparator
 	
+//	reg en_2_miss;
 //	reg rst,clk,en_1,en_2;
 //	reg [16:1] Branch_address_update_iterative;
 //	reg [16:1] Branch_address_update;
@@ -36,7 +37,7 @@ module Branch_address_folded_hist_reg_pos_BF
 	//Common signal
 	wire clk_iterative, clk_true; //two clock for two different kind of register
 
-	assign clk_iterative = ((en_1 ==1) | (en_2 == 1)) & clk;
+	assign clk_iterative = ((en_1 ==1) | (en_2_miss == 1)) & clk;
 	assign clk_true = (en_2==1) & clk;
 
 	PC_comparator PC_comparator_1 ( .Branch_address_iterative(Stack_branch_iterative), .Branch_address_update(Branch_address_update_iterative), .signal(signal_clk) );
@@ -44,10 +45,10 @@ module Branch_address_folded_hist_reg_pos_BF
 
 	//Branch address
 	genvar i;
-	Recency_stack_branch Recency_stack_branch_1 ( .D_stack(Branch_address_update_iterative), .signal_2(Stack_branch_true[48]), .signal(signal_clk[48]), .clk(clk_iterative), .en(en_2), .Stack_out(Stack_branch_iterative[48]), .rst(rst) );
+	Recency_stack_branch Recency_stack_branch_1 ( .D_stack(Branch_address_update_iterative), .signal_2(Stack_branch_true[48]), .signal(signal_clk[48]), .clk(clk_iterative), .en(en_2_miss), .Stack_out(Stack_branch_iterative[48]), .rst(rst) );
 	generate
 		for (i=47; i>=1; i=i-1) begin
-			Recency_stack_branch Recency_stack_branch_1 ( .D_stack(Stack_branch_iterative[i+1]), .signal_2(Stack_branch_true[i]), .signal(signal_clk[i]), .clk(clk_iterative), .en(en_2), .Stack_out(Stack_branch_iterative[i]), .rst(rst) );
+			Recency_stack_branch Recency_stack_branch_1 ( .D_stack(Stack_branch_iterative[i+1]), .signal_2(Stack_branch_true[i]), .signal(signal_clk[i]), .clk(clk_iterative), .en(en_2_miss), .Stack_out(Stack_branch_iterative[i]), .rst(rst) );
 		end
 	endgenerate
 	
@@ -73,10 +74,10 @@ module Branch_address_folded_hist_reg_pos_BF
 
 	//Folded_hist
 	wire [48:1] Folded_hist_true;
-	Recency_stack_hist Recency_stack_hist ( .D_stack(Folded_hist_update_iterative), .signal_2(Folded_hist_true[48]), .signal(signal_clk[48]), .clk(clk_iterative), .en(en_2), .Stack_out(Folded_hist_iterative[48]), .rst(rst));
+	Recency_stack_hist Recency_stack_hist ( .D_stack(Folded_hist_update_iterative), .signal_2(Folded_hist_true[48]), .signal(signal_clk[48]), .clk(clk_iterative), .en(en_2_miss), .Stack_out(Folded_hist_iterative[48]), .rst(rst));
 	generate 
 		for (i=47; i>=1; i=i-1) begin
-			Recency_stack_hist Recency_stack_hist_iterative ( .D_stack(Folded_hist_iterative[i+1]), .signal_2(Folded_hist_true[i]), .signal(signal_clk[i]), .clk(clk_iterative), .en(en_2), .Stack_out(Folded_hist_iterative[i]), .rst(rst));
+			Recency_stack_hist Recency_stack_hist_iterative ( .D_stack(Folded_hist_iterative[i+1]), .signal_2(Folded_hist_true[i]), .signal(signal_clk[i]), .clk(clk_iterative), .en(en_2_miss), .Stack_out(Folded_hist_iterative[i]), .rst(rst));
 		end	
 	endgenerate
 
@@ -89,10 +90,10 @@ module Branch_address_folded_hist_reg_pos_BF
 	//Position
 	wire [6:1] Stack_true [48:1];
 
-	Recency_stack_pos entity_4 ( .D_stack(6'd0), .signal_2(Stack_true[48]), .signal(signal_clk[48]), .clk(clk_iterative), .en(en_2), .Stack_out(Pos_iterative [48]), .rst(rst));
+	Recency_stack_pos entity_4 ( .D_stack(6'd0), .signal_2(Stack_true[48]), .signal(signal_clk[48]), .clk(clk_iterative), .en(en_2_miss), .Stack_out(Pos_iterative [48]), .rst(rst));
 	generate 
 		for (i=47; i>=1; i=i-1) begin
-			Recency_stack_pos entity_5 ( .D_stack(Pos_iterative[i+1]), .signal_2(Stack_true[i]), .signal(signal_clk[i]), .clk(clk_iterative), .en(en_2), .Stack_out(Pos_iterative [i]), .rst(rst));
+			Recency_stack_pos entity_5 ( .D_stack(Pos_iterative[i+1]), .signal_2(Stack_true[i]), .signal(signal_clk[i]), .clk(clk_iterative), .en(en_2_miss), .Stack_out(Pos_iterative [i]), .rst(rst));
 		end
 	endgenerate
 
@@ -104,70 +105,78 @@ module Branch_address_folded_hist_reg_pos_BF
 	endgenerate
 	
 	//Simulate test
-	//always begin
-	//	clk=0;
-	//	forever #20 clk=~clk;
-	//end
-
-	//initial begin
-	//	en_1=0;
-	//	en_2=0;
-	//	rst = 1;
-	//	#60
-	//	Branch_address_update = 16'h00ff;
-//		Branch_address_update_iterative = 16'hffff;
-//		Folded_hist_update = 1; 
-//		Folded_hist_update_iterative = 0;
-//		Pos_update_iterative = 15;
-//		Pos_update = 2;
-//		rst = 0;
-//		en_1= 1;
-//		en_2= 0;
+//	always begin
+//		clk=0;
+//		forever #20 clk=~clk;
+//	end
+//
+//	initial begin
+//		en_2_miss <= 0;
+//		en_1<=1;
+//		en_2<=1;
+//		rst <= 1;
 //		#40
-//		Branch_address_update = 16'h00ff;
-//		Branch_address_update_iterative = 16'h0fff;
-//		Folded_hist_update = 1; 
-//		Folded_hist_update_iterative = 1;
-//		Pos_update_iterative = 15;
-//		Pos_update = 2;
-//		en_1 = 1;
-//		en_2 = 0;
+//		en_1 <= 0;
+//		en_2 <= 0;
+//		#20
+//		
+//		Branch_address_update <= 16'h00ff;
+//		Branch_address_update_iterative <= 16'hffff;
+//		Folded_hist_update <= 1; 
+//		Folded_hist_update_iterative <= 0;
+//		Pos_update_iterative <= 15;
+//		Pos_update <= 2;
+//		rst <= 0;
+//		en_1<= 1;
+//		en_2<= 0;
 //		#40
-//		Branch_address_update = 16'h01ff;
-//		Branch_address_update_iterative = 16'hffff;
-//		Folded_hist_update = 0; 
-//		Folded_hist_update_iterative = 1;
-//		Pos_update_iterative = 7;
-//		Pos_update = 2;
-//		en_1 = 1;
-//		en_2 = 0;
+//		Branch_address_update <= 16'h00ff;
+//		Branch_address_update_iterative <= 16'h0fff;
+//		Folded_hist_update <= 1; 
+//		Folded_hist_update_iterative <= 1;
+//		Pos_update_iterative <= 15;
+//		Pos_update <= 2;
+//		en_1 <= 1;
+//		en_2 <= 0;
 //		#40
-//		Branch_address_update = 16'h01ff;
-//		Branch_address_update_iterative = 16'h0fff;
-//		Folded_hist_update = 0; 
-//		Folded_hist_update_iterative = 1;
-//		Pos_update_iterative = 3;
-//		Pos_update = 2;
-//		en_2 = 1;
-//		en_1 = 0;
+//		Branch_address_update <= 16'h01ff;
+//		Branch_address_update_iterative <= 16'hffff;
+//		Folded_hist_update <= 0; 
+//		Folded_hist_update_iterative <= 1;
+//		Pos_update_iterative <= 7;
+//		Pos_update <= 2;
+//		en_1 <= 1;
+//		en_2 <= 0;
 //		#40
-//		Branch_address_update = 16'h00ff;
-//		Branch_address_update_iterative = 16'hffff;
-//		Folded_hist_update = 1; 
-//		Folded_hist_update_iterative = 0;
-//		Pos_update_iterative = 15;
-//		Pos_update = 2;
-//		en_1 = 1;
-//		en_2 = 1;
+//		Branch_address_update <= 16'h01ff;
+//		Branch_address_update_iterative <= 16'h0fff;
+//		Folded_hist_update <= 0; 
+//		Folded_hist_update_iterative <= 1;
+//		Pos_update_iterative <= 3;
+//		Pos_update <= 2;
+//		en_2 <= 1;
+//		en_1 <= 0;
+//		en_2_miss <= 1;
 //		#40
-//		Branch_address_update = 16'h0000;
-//		Branch_address_update_iterative = 16'h000f;
-//		Folded_hist_update = 0; 
-//		Folded_hist_update_iterative = 0;
-//		Pos_update_iterative = 1;
-//		Pos_update = 1;
-//		en_1 = 0;
-//		en_2 = 0;
+//		Branch_address_update <= 16'h00ff;
+//		Branch_address_update_iterative <= 16'hffff;
+//		Folded_hist_update <= 1; 
+//		Folded_hist_update_iterative <= 0;
+//		Pos_update_iterative <= 15;
+//		Pos_update <= 2;
+//		en_1 <= 1;
+//		en_2 <= 1;
+//		en_2_miss <= 1;
+//		#40
+//		Branch_address_update <= 16'h0000;
+//		Branch_address_update_iterative <= 16'h000f;
+//		Folded_hist_update <= 0; 
+//		Folded_hist_update_iterative <= 0;
+//		Pos_update_iterative <= 1;
+//		Pos_update <= 1;
+//		en_1 <= 0;
+//		en_2 <= 0;
+//		en_2_miss <= 0;
 //	end
 
 endmodule
@@ -187,7 +196,7 @@ module Recency_stack_hist
 
 
 	assign Stack =Stack_reg;
-
+	
 	always_ff @(negedge clk) begin
 		if (rst == 1)
 			Stack_reg <= 0;
@@ -223,10 +232,8 @@ module Recency_stack_branch
 	wire [16:1] Stack;
 	
 	//Simulate
-
-
 	assign Stack =Stack_reg;
-
+	
 	always_ff @(negedge clk) begin
 		if (rst == 1)
 			Stack_reg <= 0;
@@ -258,13 +265,12 @@ module Recency_stack_pos
 	input wire signal,	   // Enable update if it 's branch
 	input wire clk, en, rst	   // en is for misprediction
 );
-	reg [6:1] Stack_reg, Stack_add;
+	reg [6:1] Stack_reg, Stack_add, signal_2_temp;
 	wire [6:1]  Stack;	
 
 	//Simulate
 
 	assign Stack = Stack_reg;
-
 	always_ff @(negedge clk) begin
 		if (rst == 1) 
 			Stack_reg <= 0;
@@ -272,12 +278,17 @@ module Recency_stack_pos
 			if ((signal == 0) && (en == 0))
 				Stack_reg <= D_stack;
 			else if (en == 1)
-				Stack_reg <= signal_2;
+				Stack_reg <= signal_2_temp;
 			else
 				Stack_reg <= Stack_reg;
 		end
 	end
-
+	always_comb begin
+		if (signal_2 == 0)
+			signal_2_temp = signal_2;
+		else
+			signal_2_temp = signal_2-1;
+	end
 	always_comb begin
 		if (Stack == 63)
 			Stack_add = Stack;
@@ -291,7 +302,7 @@ module Recency_stack_pos
 		else if (en == 0)
 			Stack_out = Stack_add;
 		else
-			Stack_out = Stack_reg;
+			Stack_out = signal_2;
 	end
 	
 
