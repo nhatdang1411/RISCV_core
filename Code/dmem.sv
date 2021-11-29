@@ -1,4 +1,4 @@
-module dmem(clk,Addr,MemRW,DataW,whb,DataR);
+module dmem #(parameter PROGRAM_DATA= "") (clk,Addr,MemRW,DataW,whb,DataR);
 	input wire clk;
 	input wire [2:0]whb;
 	input wire [31:0] Addr;
@@ -7,13 +7,14 @@ module dmem(clk,Addr,MemRW,DataW,whb,DataR);
 	output reg [31:0] DataR;
 	wire [31:0]num;
 	wire[31:0]numinc;
-	reg [31:0]MEMO[0:262140];
+	reg [31:0]MEMO[0:4096];
 	integer i;
 	initial begin
 		DataR<=0;
-		for(i=0;i<=262140;i=i+1) begin
-			MEMO[i]=i;
+		for(i=0;i<=4096;i=i+1) begin
+			MEMO[i]=0;
 		end
+		$readmemh(PROGRAM_DATA,MEMO);
 	end
 	assign num=Addr>>2;
 	assign numinc=num+1;

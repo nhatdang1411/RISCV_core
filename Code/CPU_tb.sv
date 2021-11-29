@@ -1,15 +1,56 @@
 `include "processor_specific_macros.h"
 `timescale 1ps/1ps
-module CPU 
-#(
-	parameter PROGRAM_INST = "",
-	parameter PROGRAM_DATA = ""
-)
-(
-	output wire rst_out,
-	input wire clk, rst_BF
-);	
+module CPU_tb;
+	parameter PROGRAM_INST = "/home/nhat/Documents/Reference_core/BRISC-V_Processors/software/applications/binaries/bubblesort.mem";
+	parameter PROGRAM_DATA = "/home/nhat/Documents/Reference_core/BRISC-V_Processors/software/applications/binaries/data_bubblesort_new.mem";
+	parameter TEST_LENGTH = 200000;
+	parameter TEST_NAME = "BUBBLE SORT";
+	parameter LOG_FILE = "basic_test_results.txt";
+	reg clk, rst_BF;
 	
+	reg condition;
+	integer log_file,x;
+	always begin
+		clk=0;
+		forever #20 clk=~clk;
+	end
+	initial begin
+		rst_BF = 1 ;
+		#60 rst_BF = 0;
+	end
+	initial begin	
+	 #TEST_LENGTH
+
+ 		log_file = $fopen(LOG_FILE,"a+");
+ 		if(!log_file) begin
+ 			$display("Could not open log file... Exiting!");
+			$finish();
+  		end
+
+		assign condition = (`DATA_MEMORY[378] == 32'h0000014 )&(`DATA_MEMORY[377] == 32'h0000000a )&(`DATA_MEMORY[376] == 32'h00000008 )
+		&(`DATA_MEMORY[375] == 32'h00000005 )&(`DATA_MEMORY[374] == 32'h00000004 )&(`DATA_MEMORY[373] == 32'h0000003 )
+		&(`DATA_MEMORY[372] == 32'h00000002 )&(`DATA_MEMORY[371] == 32'h00000002 )&(`DATA_MEMORY[370] == 32'h00000001 )
+		&(`DATA_MEMORY[369] == 32'hffffffff );
+  		if(condition) begin
+    			$display("%s: Test Passed!", TEST_NAME);
+    			$fdisplay(log_file, "%s: Test Passed!", TEST_NAME);
+  		end 
+		else begin
+    			$display("%s: Test Failed!", TEST_NAME);
+    			$display("Dumping mem states:");
+    			$display("Reg Index, Value");
+    			for( x=368; x<379; x=x+1) begin
+      				$display("%d: %h", x, `DATA_MEMORY[x]);
+      				$fdisplay(log_file, "%d: %h", x, `DATA_MEMORY[x]);
+    			end
+    			$display("");
+    			$fdisplay(log_file, "");
+  		end // pass/fail check
+
+  		$fclose(log_file);
+  		$stop();
+
+	end
 
 //	wire [31:0] pc,pcnew,pcinc,pc0,PC_actual;
 //	wire [31:0] inst,wb,rs1,rs2,imm,out,rs1new1,alu,DataR,DataR1,rs1branch,rs2imm;
@@ -29,13 +70,14 @@ module CPU
 	wire [32:1] PC_predict_update;
 	wire [32:1] PC_predict_IF;
         wire en_1, en_2;
+	wire [32:1] PC_in_1;
 	wire temp;
 	wire [9:1] total_weights;
 	
 
 	wire PCSel, RST, hit, check, stall;
 	wire [31:0] PC_actual, alu, inst2, PC_predict_pre_IF, PC_in_old, pc;
-	BF_neural_predictor BF_neural_predictor ( .status(status), .PC_predict_o(PC_predict_o), .status_update(status_update), .PC_predict_update(PC_predict_update), .PC_predict_IF(PC_predict_IF), .en_1(en_1), .en_2(en_2), .temp(temp), .total_weights(total_weights),
+	BF_neural_predictor BF_neural_predictor ( .status(status), .PC_predict_o(PC_predict_o), .status_update(status_update), .PC_predict_update(PC_predict_update), .PC_predict_IF(PC_predict_IF), .en_1(en_1), .en_2(en_2), .PC_in_1(PC_in_1), .temp(temp), .total_weights(total_weights),
 	.Branch_direction(PCSel), .PC_actual(PC_actual), .PC_alu(alu), .inst(inst2), .PC_in(pc), .rst(rst_BF), .clk(clk), .PC_predict_pre_IF(PC_predict_pre_IF), .rst_pipeline(RST), .hit(hit), .check(check), .PC_in_old(PC_in_old), .stall(stall) );
 	
 	wire [31:0] pc2;
@@ -114,6 +156,4 @@ module CPU
 	wire [1:0] WBsel;
 	muxdmem muxdmem (.ALU(alu2),.mem(DataR1),.pc(pc4),.WBsel(WBsel),.wb(wb));
 	controlstage5 controlstage5 (.inst(inst4),.WBsel(WBsel),.RegWEn(RegWEn));
-
-	assign rst_out = RST;
 endmodule

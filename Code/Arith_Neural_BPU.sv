@@ -14,7 +14,7 @@ module Branch_status_table #(parameter BST_length = 16383)
 	//Internal memory
 	reg [2:1] status_bits [BST_length:0];
 	reg [32:1] PC_predict [BST_length:0];
-	reg [32:1] PC [BST_length:0];
+	reg [18:1] PC [BST_length:0];
 
 
 	//Combinational
@@ -34,7 +34,7 @@ module Branch_status_table #(parameter BST_length = 16383)
 	//Prediction
 	always_ff @(posedge clk) begin
 		
-		if ( (PC[PC_index]==PC_in) && (status_bits[PC_index]!=0) ) begin
+		if ( (PC[PC_index]==PC_in[32:15]) && (status_bits[PC_index]!=0) ) begin
 			status <= status_bits [PC_index];
 			PC_predict_o <= PC_predict [PC_index];
 		end
@@ -61,7 +61,7 @@ module Branch_status_table #(parameter BST_length = 16383)
 		end
 		if (en_1==1) begin
 			status_bits[PC_index_update] <= status_update;
-			PC [PC_index_update] <= PC_update ;
+			PC [PC_index_update] <= PC_update[32:15] ;
 			PC_predict[PC_index_update] <= PC_predict_update;
 		end
 		else begin
@@ -111,7 +111,7 @@ module Sr_BST_status_address
 
 	input wire [2:1] status,
 	input wire [32:1] address, 
-	input wire clk,rst
+	input wire clk, rst, stall
 );
 	wire [6:1] status_update_temp;
 	wire [96:1] address_update_temp;
@@ -125,8 +125,14 @@ module Sr_BST_status_address
 			address_update <= 0;
 		end
 		else begin
-			status_update <= {status, status_update_temp[6:3]};
-			address_update <= {address, address_update_temp[96:33]};
+			if (stall == 1) begin
+				status_update <= status_update ;
+				address_update <= address_update ;
+			end
+			else begin
+				status_update <= {status, status_update_temp[6:3]};
+				address_update <= {address, address_update_temp[96:33]};
+			end
 		end
 	end
 	`ifdef FORMAL
@@ -168,8 +174,8 @@ module Sr_PC_in
 (
 	output reg [96:1] PC_in_update,
 	
-	input wire [32:1] PC_in,
-	input wire clk, rst
+	input wire [32:1] PC_in, 
+	input wire clk, rst, stall
 );
 	wire [96:1] PC_in_temp;
 
@@ -178,8 +184,12 @@ module Sr_PC_in
 	always_ff @(negedge clk) begin
 		if (rst == 1)
 			PC_in_update <= 0;
-		else
-			PC_in_update <= {PC_in , PC_in_temp[96:33]};
+		else begin
+			if (stall == 1)
+				PC_in_update <= PC_in_update;
+			else
+				PC_in_update <= {PC_in , PC_in_temp[96:33]};
+		end
 	end
 endmodule
 
@@ -188,7 +198,7 @@ module Sr_PC_predict
 	output reg [96:1] PC_in_predict,
 	
 	input wire [32:1] PC_in,
-	input wire clk, rst
+	input wire clk, rst, stall
 );
 	wire [96:1] PC_in_temp;
 
@@ -197,8 +207,12 @@ module Sr_PC_predict
 	always_ff @(negedge clk) begin
 		if (rst == 1)
 			PC_in_predict <= 0;
-		else
-			PC_in_predict <= {PC_in , PC_in_temp[96:33]};
+		else begin
+			if (stall == 1)
+				PC_in_predict <= PC_in_predict;
+			else
+				PC_in_predict <= {PC_in , PC_in_temp[96:33]};
+		end
 	end
 endmodule
 
@@ -260,7 +274,7 @@ module Sr_Bias_weight
 	output reg [6:1] weight_update,
 
 	input wire [2:1] weight,
-	input wire clk, rst
+	input wire clk, rst, stall
 );
 	wire [6:1] weight_update_temp;
 
@@ -268,8 +282,12 @@ module Sr_Bias_weight
 	always_ff @(negedge clk) begin
 		if (rst ==1)
 			weight_update <= 0;
-		else
-			weight_update <= {weight , weight_update_temp[6:3]};
+		else begin
+			if (stall == 1) 
+				weight_update <= weight_update;
+			else
+				weight_update <= {weight , weight_update_temp[6:3]};
+		end
 
 	end
 	`ifdef FORMAL
@@ -499,7 +517,7 @@ module Sr_perceptron_address
 	output reg [480:1] perceptron_address_update,
 
 	input wire [160:1] perceptron_address,
-	input wire clk, rst
+	input wire clk, rst, stall
 );
 	wire [480:1] perceptron_address_update_temp;
 
@@ -508,8 +526,12 @@ module Sr_perceptron_address
 	always_ff @(negedge clk) begin
 		if (rst == 1)
 			perceptron_address_update <= 0;
-		else
-			perceptron_address_update <= {perceptron_address, perceptron_address_update_temp [480:161]};
+		else begin
+			if (stall == 1) 
+				perceptron_address_update <= perceptron_address_update;
+			else
+				perceptron_address_update <= {perceptron_address, perceptron_address_update_temp [480:161]};
+		end
 	end
 endmodule
 
@@ -518,7 +540,7 @@ module Sr_perceptron_weight
 	output reg [144:1] perceptron_weights_update,
 
 	input wire [48:1] perceptron_weights,
-	input wire clk, rst
+	input wire clk, rst, stall
 );
 	wire [144:1] perceptron_weight_update_temp;
 
@@ -527,8 +549,12 @@ module Sr_perceptron_weight
 	always_ff @(negedge clk) begin
 		if (rst == 1)
 			perceptron_weights_update <= 0;
-		else
-			perceptron_weights_update <= {perceptron_weights, perceptron_weight_update_temp [144:49]};
+		else begin
+			if (stall == 1)
+				perceptron_weights_update <= perceptron_weights_update;
+			else
+				perceptron_weights_update <= {perceptron_weights, perceptron_weight_update_temp [144:49]};
+		end
 	end
 endmodule
 
@@ -540,7 +566,7 @@ module Perceptron_table_BF #(parameter Perceptron_table_length = 65535)
 	input wire [144:1] perceptron_weights_update,
 	input wire clk, en_1
 );
-	reg [144:1] perceptron_table_BF [Perceptron_table_length:0];
+	reg [3:1] perceptron_table_BF [Perceptron_table_length:0];
 
 	//Initialize
         initial begin
@@ -552,7 +578,7 @@ module Perceptron_table_BF #(parameter Perceptron_table_length = 65535)
 	//Prediction
 	always_ff @(posedge clk) begin
                 for (int i=1; i<=48; i=i+1) begin
-                        perceptron_weights [3*(i-1)+1 +: 3] <= perceptron_table_BF [index[16*(i-1)+1+:16]] [3*(i-1)+1+:3];
+                        perceptron_weights [3*(i-1)+1 +: 3] <= perceptron_table_BF [index[16*(i-1)+1+:16]];
                 end
         end
 
@@ -561,11 +587,11 @@ module Perceptron_table_BF #(parameter Perceptron_table_length = 65535)
 	always_ff @(posedge clk) begin
                 if (en_1==1)
                         for (int i=1; i<=48; i=i+1) begin
-                                perceptron_table_BF [index_update[16*(i-1)+1+:16]] [3*(i-1)+1+:3] <= perceptron_weights_update [3*(i-1)+1+:3];
+                                perceptron_table_BF [index_update[16*(i-1)+1+:16]]  = perceptron_weights_update [3*(i-1)+1+:3];
                         end
                 else
                         for (int i=1; i<=48; i=i+1) begin
-                                perceptron_table_BF [index_update[16*(i-1)+1+:16]] [3*(i-1)+1+:3] <= perceptron_table_BF [index_update[16*(i-1)+1+:16]] [3*(i-1)+1+:3];
+                                perceptron_table_BF [index_update[16*(i-1)+1+:16]]  <= perceptron_table_BF [index_update[16*(i-1)+1+:16]] ;
                         end;
         end
 	`ifdef FORMAL
@@ -605,7 +631,7 @@ module Sr_perceptron_address_BF
         output reg [2304:1] perceptron_address_update,
 
         input wire [768:1] perceptron_address,
-        input wire clk, rst
+        input wire clk, rst, stall
 );
         wire [2304:1] perceptron_address_update_temp;
 
@@ -614,8 +640,12 @@ module Sr_perceptron_address_BF
         always_ff @(negedge clk) begin
 		if (rst == 1)
 			perceptron_address_update <= 0;
-		else
-                	perceptron_address_update <= {perceptron_address, perceptron_address_update_temp [2304:769]};
+		else begin
+			if (stall == 1)
+				perceptron_address_update <= perceptron_address_update;
+			else
+                		perceptron_address_update <= {perceptron_address, perceptron_address_update_temp [2304:769]};
+		end
         end
 endmodule
 
@@ -624,7 +654,7 @@ module Sr_perceptron_weight_BF
         output reg [432:1] perceptron_weight_update,
 
         input wire [144:1] perceptron_weight,
-        input wire clk, rst
+        input wire clk, rst, stall
 );
         wire [432:1] perceptron_weight_update_temp;
 
@@ -633,9 +663,12 @@ module Sr_perceptron_weight_BF
         always_ff @(negedge clk) begin
 		if (rst == 1)
 			perceptron_weight_update <= 0;
-		else
-               		perceptron_weight_update <= {perceptron_weight, perceptron_weight_update [432:145]};
-
+		else begin
+			if (stall == 1)
+				perceptron_weight_update <= perceptron_weight_update;
+			else
+               			perceptron_weight_update <= {perceptron_weight, perceptron_weight_update [432:145]};
+		end
         end
 endmodule
 
@@ -1141,7 +1174,11 @@ module BST_update #(parameter theta = 4)
 			en_3_temp = 1;
 			status_update = 2'd3 & {2{PC_check}};
 		end
-
+		else if ( (PC_predict != PC_actual)&&(old_status!=0) ) begin
+			en_2_temp = 1;
+			en_3_temp = 1;
+			status_update = 2'd3 & {2{PC_check}};
+		end
 		else if ( (old_status == 3) && ( (Branch_direction != Branch_prediction) || (total_weights_update <= theta) ) ) begin
 			en_2_temp = 0;
 			en_3_temp = 1;
@@ -1555,13 +1592,21 @@ module Mul_perceptron_GHR
 	input wire [16:1] GHR_reg,
 	input wire [48:1] perceptron_weights
 );
-	wire [48:1] perceptron_weights_temp;
-	genvar i;
-        generate
-                for (i=1; i<=16; i=i+1) begin
-                        Full_adder_3_bit Full_adder_3_bit ( .c(perceptron_weights_temp [(i-1)*3+1+:3]), .a(3'd1), .b(~perceptron_weights [(i-1)*3+1+:3]));
+	reg [48:1] perceptron_weights_temp;
+	always_comb begin
+                for (int i=1; i<=16; i=i+1) begin
+			case (perceptron_weights [(i-1)*3+1+:3])
+				3'b000: perceptron_weights_temp [(i-1)*3+1+:3] = 3'b000;
+				3'b001: perceptron_weights_temp [(i-1)*3+1+:3] = 3'b111;
+				3'b010: perceptron_weights_temp [(i-1)*3+1+:3] = 3'b110;
+				3'b011: perceptron_weights_temp [(i-1)*3+1+:3] = 3'b101;
+				3'b100: perceptron_weights_temp [(i-1)*3+1+:3] = 3'b011;
+				3'b101: perceptron_weights_temp [(i-1)*3+1+:3] = 3'b011;
+				3'b110: perceptron_weights_temp [(i-1)*3+1+:3] = 3'b010;
+				3'b111: perceptron_weights_temp [(i-1)*3+1+:3] = 3'b001;
+			endcase
                 end
-        endgenerate
+        end
 
 	
 	always_comb begin
@@ -1600,14 +1645,22 @@ module Mul_perceptron_RS_H
 	input wire [48:1] RS_H,
 	input wire [144:1] RS_weights
 );
-	wire [144:1] RS_weights_temp;
+	reg [144:1] RS_weights_temp;
 	
-	genvar i;
-	generate
-		for (i=1; i<=48; i=i+1) begin
-			Full_adder_3_bit Full_adder_3_bit ( .c(RS_weights_temp [(i-1)*3+1+:3]), .a(3'd1), .b(~RS_weights [(i-1)*3+1+:3]));
+	always_comb begin
+		for (int i=1; i<=48; i=i+1) begin
+			case (RS_weights [(i-1)*3+1+:3])
+				3'b000: RS_weights_temp [(i-1)*3+1+:3] = 3'b000;
+				3'b001: RS_weights_temp [(i-1)*3+1+:3] = 3'b111;
+				3'b010: RS_weights_temp [(i-1)*3+1+:3] = 3'b110;
+				3'b011: RS_weights_temp [(i-1)*3+1+:3] = 3'b101;
+				3'b100: RS_weights_temp [(i-1)*3+1+:3] = 3'b011;
+				3'b101: RS_weights_temp [(i-1)*3+1+:3] = 3'b011;
+				3'b110: RS_weights_temp [(i-1)*3+1+:3] = 3'b010;
+				3'b111: RS_weights_temp [(i-1)*3+1+:3] = 3'b001;
+			endcase
 		end
-	endgenerate
+	end
 
 	always_comb begin
 		for (int i=1; i<=48; i=i+1) begin
@@ -1682,7 +1735,7 @@ module Sr_total_weights
 	output reg [27:1] total_weights_update,
 
 	input wire [9:1] total_weights,
-	input clk, rst
+	input clk, rst, stall
 );
 	wire [27:1] total_weights_temp;
 
@@ -1691,8 +1744,12 @@ module Sr_total_weights
 	always_ff @(negedge clk) begin 
 		if (rst == 1)
 			total_weights_update <= 0;
-		else
-			total_weights_update <= {total_weights, total_weights_temp[27:10]};
+		else begin
+			if (stall == 1) 
+				total_weights_update <= total_weights_update;
+			else
+				total_weights_update <= {total_weights, total_weights_temp[27:10]};;
+		end
 	end
 	`ifdef FORMAL
 		logic f_valid = 0;
@@ -1716,7 +1773,7 @@ module Sr_prediction
 	output reg [3:1] prediction_update,
 
 	input wire prediction,
-	input wire clk, rst
+	input wire clk, rst, stall
 );
 	wire [3:1] prediction_temp;
 
@@ -1725,8 +1782,12 @@ module Sr_prediction
 	always_ff @(negedge clk) begin
 		if (rst == 1)
 			prediction_update <= 0;
-		else
-			prediction_update <= {prediction , prediction_temp[3:2]};
+		else begin
+			if (stall == 1)
+				prediction_update <= prediction_update;
+			else
+				prediction_update <= {prediction , prediction_temp[3:2]};
+		end
 	end
 	`ifdef FORMAL
 		logic f_valid = 0;
@@ -1751,7 +1812,7 @@ module Sr_GHR_reg
 	output reg [48:1] GHR_reg_update,
 
 	input wire [16:1] GHR_reg,
-	input clk, rst
+	input clk, rst, stall
 );
 	wire [48:1] GHR_reg_temp;
 
@@ -1760,8 +1821,12 @@ module Sr_GHR_reg
 	always_ff @(negedge clk) begin 
 		if (rst == 1)
 			GHR_reg_update <= 0;
-		else
-			GHR_reg_update <= {GHR_reg, GHR_reg_temp[48:17]};
+		else begin
+			if (stall == 1)
+				GHR_reg_update <= GHR_reg_update;
+			else
+				GHR_reg_update <= {GHR_reg, GHR_reg_temp[48:17]};
+		end
 	end
 	`ifdef FORMAL
                 logic f_valid = 0;
@@ -1787,7 +1852,7 @@ module Sr_RS_H
 	output reg [144:1] RS_H_update,
 
 	input wire [48:1] RS_H,
-	input clk, rst
+	input clk, rst, stall
 );
 	wire [144:1] RS_H_temp;
 
@@ -1796,8 +1861,12 @@ module Sr_RS_H
 	always_ff @(negedge clk) begin 
 		if (rst == 1)
 			RS_H_update <= 0;
-		else
-			RS_H_update <= {RS_H, RS_H_temp[144:49]};
+		else begin
+			if (stall == 1)
+				RS_H_update <= RS_H_update;
+			else
+				RS_H_update <= {RS_H, RS_H_temp[144:49]};
+		end
 	end
 	`ifdef FORMAL
                 logic f_valid = 0;

@@ -13,11 +13,11 @@ module BF_neural_predictor
 	output wire [2:1] status_update,
 	output wire [32:1] PC_predict_update,
 	output wire [32:1] PC_predict_IF, 
-	output reg [32:1] PC_in_1,
 	output reg temp,
        	output wire en_1, en_2,
 	output wire [9:1] total_weights,
 
+	input wire stall,
 	input wire Branch_direction,	
 	input wire [32:1] PC_actual,
 	input wire [32:1] PC_alu,
@@ -33,7 +33,7 @@ module BF_neural_predictor
 //	reg [32:1] PC_in_1;
 	wire [32:1] PC_in_wire;
 	assign PC_in_wire = PC_in;
-        Sr_PC_in Sr_PC_in ( .PC_in_update(PC_in_update), .PC_in (PC_in_wire), .clk(clk), .rst(rst));
+        Sr_PC_in Sr_PC_in ( .PC_in_update(PC_in_update), .PC_in (PC_in_wire), .clk(clk), .rst(rst), .stall(stall));
 
 	//Branch_status_table signal	en_1
 	//wire [2:1] status;
@@ -49,7 +49,7 @@ module BF_neural_predictor
 	wire [6:1] status_update_reg;
 	wire [96:1] address_update;
 
-	Sr_BST_status_address Sr_BST_status_address ( .status_update(status_update_reg), .address_update(address_update), .status(status), .address(PC_predict_o), .clk(clk), .rst(rst));
+	Sr_BST_status_address Sr_BST_status_address ( .status_update(status_update_reg), .address_update(address_update), .status(status), .address(PC_predict_o), .clk(clk), .rst(rst), .stall(stall));
 
 	
 	//Bias_weight_table en_1 | en_2
@@ -59,7 +59,7 @@ module BF_neural_predictor
 
 	Bias_weight_table Bias_weight_table ( .weight(weight), .index(PC_in[10:1]), .index_update(PC_in_update[10:1]), .weight_update(weight_update_2), .en_1(en_1|en_2), .clk(clk));
 
-	Sr_Bias_weight Sr_Bias_weight ( .weight_update(weight_update), .weight(weight), .clk(clk), .rst(rst));
+	Sr_Bias_weight Sr_Bias_weight ( .weight_update(weight_update), .weight(weight), .clk(clk), .rst(rst), .stall(stall));
 
 	//Perceptron_table en_1 | en_2
 	wire [48:1] perceptron_weights;
@@ -71,9 +71,9 @@ module BF_neural_predictor
 	
 	Perceptron_table Perceptron_table ( .perceptron_weights(perceptron_weights), .index(perceptron_address), .index_update(perceptron_address_update[160:1]), .perceptron_weights_update (perceptron_weights_update_2), .clk(clk), .en_1(en_1|en_2));
 
-	Sr_perceptron_address Sr_perceptron_address (.perceptron_address_update(perceptron_address_update), .perceptron_address(perceptron_address), .clk(clk), .rst(rst));
+	Sr_perceptron_address Sr_perceptron_address (.perceptron_address_update(perceptron_address_update), .perceptron_address(perceptron_address), .clk(clk), .rst(rst), .stall(stall));
 
-	Sr_perceptron_weight Sr_perceptron_weight ( .perceptron_weights_update(perceptron_weights_update), .perceptron_weights(perceptron_weights) ,.clk(clk), .rst(rst));
+	Sr_perceptron_weight Sr_perceptron_weight ( .perceptron_weights_update(perceptron_weights_update), .perceptron_weights(perceptron_weights) ,.clk(clk), .rst(rst), .stall(stall));
 
 	//Perceptron_table_BF en_2
 	
@@ -85,9 +85,9 @@ module BF_neural_predictor
 
 	Perceptron_table_BF Perceptron_table_BF ( .perceptron_weights(perceptron_weights_BF) , .index(perceptron_address_BF), .index_update(perceptron_address_update_BF[768:1]), .perceptron_weights_update(perceptron_weights_update_BF_2), .clk(clk), .en_1(en_2));
 
-	Sr_perceptron_address_BF Sr_perceptron_address_BF ( .perceptron_address_update(perceptron_address_update_BF), .perceptron_address(perceptron_address_BF), .clk(clk), .rst(rst));
+	Sr_perceptron_address_BF Sr_perceptron_address_BF ( .perceptron_address_update(perceptron_address_update_BF), .perceptron_address(perceptron_address_BF), .clk(clk), .rst(rst), .stall(stall));
 
-	Sr_perceptron_weight_BF Sr_perceptron_weight_BF ( .perceptron_weight_update(perceptron_weights_update_BF), .perceptron_weight(perceptron_weights_BF), .clk(clk), .rst(rst));
+	Sr_perceptron_weight_BF Sr_perceptron_weight_BF ( .perceptron_weight_update(perceptron_weights_update_BF), .perceptron_weight(perceptron_weights_BF), .clk(clk), .rst(rst), .stall(stall));
 
 	//Arith for prediction
 	wire [48:1] weights_GHR;
@@ -105,16 +105,16 @@ module BF_neural_predictor
 	Mux_prediction Mux_prediction ( .prediction(prediction), .total_weights_sign_bit(total_weights[9]), .bst_status(status));
 
 	wire [3:1] prediction_update;
-	Sr_prediction Sr_prediction ( .prediction_update(prediction_update), .prediction(prediction), .clk(clk), .rst(rst) );
+	Sr_prediction Sr_prediction ( .prediction_update(prediction_update), .prediction(prediction), .clk(clk), .rst(rst), .stall(stall) );
 	
 	wire [27:1] total_weights_update;
-	Sr_total_weights Sr_total_weights ( .total_weights_update(total_weights_update), .total_weights(total_weights), .clk(clk), .rst(rst));
+	Sr_total_weights Sr_total_weights ( .total_weights_update(total_weights_update), .total_weights(total_weights), .clk(clk), .rst(rst), .stall(stall));
 
 	wire [48:1] GHR_reg_update;
-	Sr_GHR_reg Sr_GHR_reg ( .GHR_reg_update(GHR_reg_update), .GHR_reg(GHR_reg), .clk(clk), .rst(rst));
+	Sr_GHR_reg Sr_GHR_reg ( .GHR_reg_update(GHR_reg_update), .GHR_reg(GHR_reg), .clk(clk), .rst(rst), .stall(stall));
 
 	wire [144:1]RS_H_update; 
-	Sr_RS_H Sr_RS_H ( .RS_H_update(RS_H_update), .RS_H(RS_H), .clk(clk), .rst(rst));
+	Sr_RS_H Sr_RS_H ( .RS_H_update(RS_H_update), .RS_H(RS_H), .clk(clk), .rst(rst), .stall(stall));
 	//Update component
 //	wire rst_pipeline;
 	wire en_2_reg, en_2_reg_BF;
@@ -138,7 +138,7 @@ module BF_neural_predictor
 //	wire [32:1] PC_predict_IF;
 	wire [96:1] PC_in_predict;
 	Mux_prediction_address Mux_prediction_address ( .PC_predict(PC_predict_IF), .PC_nottaken(PC_in), .PC_taken(PC_predict_o), .prediction(prediction));
-	Sr_PC_predict Sr_PC_predict ( .PC_in_predict(PC_in_predict), .PC_in(PC_predict_IF), .clk(clk), .rst(rst));
+	Sr_PC_predict Sr_PC_predict ( .PC_in_predict(PC_in_predict), .PC_in(PC_predict_IF), .clk(clk), .rst(rst), .stall(stall));
 
 	//Register index
 	wire [160:1] Branch_address_iterative;

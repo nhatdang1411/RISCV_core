@@ -1,18 +1,22 @@
-module Regpipelinestage0 (clk,newpc,pc,rst);
+module Regpipelinestage0 (clk,newpc,pc,rst,stall);
 	input wire [31:0]newpc;
-	input wire clk,rst;
+	input wire clk,rst,stall;
 	output reg [31:0]pc;
 	always_ff @(negedge clk) begin
 		if (rst==1) 
 			pc <= 0;
-		else
-			pc <= newpc;
+		else begin
+			if (stall)
+				pc <= pc;
+			else
+				pc <= newpc;
+		end
 	end
 endmodule
 
-module Regpipelinestage1 (clk,rst,newinst,newpc,inst,pc);
+module Regpipelinestage1 (clk,rst,newinst,newpc,inst,pc,stall);
 	input wire [31:0]newinst,newpc;
-	input wire clk,rst;
+	input wire clk,rst,stall;
 	output reg [31:0]inst,pc;
 	always_ff @(negedge clk) begin
 		if (rst==1) begin
@@ -20,15 +24,21 @@ module Regpipelinestage1 (clk,rst,newinst,newpc,inst,pc);
 			pc=0;
 		end
 		else begin
-			inst=newinst;
-			pc=newpc;
+			if (stall) begin 
+				inst <= 32'h00000033;
+				pc <= pc;
+			end
+			else begin
+				inst<=newinst;
+				pc<=newpc;
+			end
 		end
 	end
 	endmodule
 
-module Regpipelinestage2 (clk,rst,newrs1,newrs2,newpc,newinst,inst,pc,rs1,rs2);
+module Regpipelinestage2 (clk,rst,newrs1,newrs2,newpc,newinst,inst,pc,rs1,rs2,stall);
 	input wire [31:0]newinst,newpc,newrs1,newrs2;
-	input wire clk,rst;
+	input wire clk,rst,stall;
 	output reg [31:0]inst,pc,rs1,rs2;
 
 	always_ff @(negedge clk) begin
@@ -43,6 +53,7 @@ module Regpipelinestage2 (clk,rst,newrs1,newrs2,newpc,newinst,inst,pc,rs1,rs2);
 			pc<=newpc;
 			rs1<=newrs1;
 			rs2<=newrs2;
+			
 		end
 	end
 endmodule
@@ -54,7 +65,7 @@ module Regpipelinestage3 (clk,rst,newalu,newrs2,newpc,newinst,inst,pc,alu,rs2);
 	always_ff @(negedge clk) begin
 		if (rst==1) begin
 			inst<=32'h00000033;
-			pc<=0;
+			pc<=newpc;
 			alu<=0;	
 			rs2<=0;
 		end

@@ -9,7 +9,7 @@ module Register(clk,DataD,AddrA,AddrB,AddrD,RegWEn,rs1,rs2);
 	initial begin
 		Register[0]=32'd0;
 		Register[1]=32'd0;
-		Register[2]=32'h000f4240;
+		Register[2]=32'd0;
 		Register[3]=32'd0;
 		Register[4]=32'd0;
 		Register[5]=32'd0;
@@ -27,7 +27,7 @@ module Register(clk,DataD,AddrA,AddrB,AddrD,RegWEn,rs1,rs2);
 		Register[17]=32'd0;
 		Register[18]=32'd0;
 		Register[19]=32'd0;
-		Register[20]=32'd250000;
+		Register[20]=32'd0;
 		Register[21]=32'd0;
 		Register[22]=32'd0;
 		Register[23]=32'd0;

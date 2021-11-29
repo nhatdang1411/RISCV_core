@@ -1,14 +1,11 @@
 module dataforwarding(inst2,inst3,inst4,cont1,cont2);
 	input wire [31:0] inst2,inst3,inst4;
 	output reg [1:0] cont1,cont2;
-	reg TH1,TH2,TH3,TH4,TH5,TH6,TH7,TH8,TH9,TH10,TH11,TH12,TH13,TH14,TH15,TH16,TH17;
-	reg TT1,TT2,TT3,TT4,TT5,TT6,TT7,TT8,TT9,TT10,TT11,TT12,TT13,TT14,TT15,TT16,TT17,TT18;
+	reg TH1,TH2,TH3,TH4,TH5,TH6,TH7,TH8,TH9,TH10,TH11,TH12,TH13,TH14,TH15,TH16,TH17,TH18;
+	reg TT1,TT2,TT3,TT4,TT5,TT6,TT7,TT8,TT9,TT10,TT11,TT12,TT13,TT14,TT15,TT16,TT17,TT18,TT19,TT20,TT21;
 	reg CK;
-	initial begin
-	cont1=2'b00;
-	cont2=2'b00;
-	end
-	always @* begin
+	reg zero_check_1,zero_check_2;
+	always_comb begin
 		cont1=2'b00;
 		cont2=2'b00;
 		CK=(inst3[6:0]==7'b0110111)||(inst3[6:0]==7'b0010111)||(inst3[6:0]==7'b1101111)||(inst3[6:0]==7'b1100111); //checking U and J type
@@ -27,19 +24,19 @@ module dataforwarding(inst2,inst3,inst4,cont1,cont2);
 		TH15= CK && (inst2[6:0]==7'b1100011) ; //B type and U,J type
 		TH16= CK && (inst2[6:0]==7'b0000011) ; //Load I type and U,J type
 		TH17= CK && (inst2[6:0]==7'b0100011) ; //S type and U,J type
-
-		
-		if (TH1||TH4||TH5||TH6||TH11||TH12||TH13||TH15||TH17) begin
+		TH18= CK && (inst2[6:0]==7'b1100111) ; //JALR and U,J type 
+		zero_check_1 = (inst3[11:7] != 0);
+		if ((TH1||TH4||TH5||TH6||TH11||TH12||TH13||TH15||TH17)&&zero_check_1) begin
 			if (inst3[11:7]==inst2[24:20])
 				cont2=2'b01;
 			if (inst3[11:7]==inst2[19:15])
 				cont1=2'b01;
 		end
-		else if (TH2||TH3||TH7||TH8||TH14||TH16) begin
+		else if ((TH2||TH3||TH7||TH8||TH14||TH16||TH18)&&zero_check_1) begin
 			if (inst3[11:7]==inst2[19:15])
 				cont1=2'b01;
 		end
-		
+		zero_check_2 = (inst4[11:7] != 0);
 		CK=(inst4[6:0]==7'b0110111)||(inst4[6:0]==7'b0010111)||(inst4[6:0]==7'b1101111)||(inst4[6:0]==7'b1100111); //checking U and J type
 		TT1=(inst2[6:0]==7'b0110011) && (inst4[6:0]==7'b0110011) ; //R type and R type
 		TT2=(inst2[6:0]==7'b0010011) && (inst4[6:0]==7'b0110011) ; //I type and R type
@@ -59,13 +56,16 @@ module dataforwarding(inst2,inst3,inst4,cont1,cont2);
 		TT16= CK && (inst2[6:0]==7'b1100011) ; //B type and U,J type
 		TT17= CK && (inst2[6:0]==7'b0000011) ; //Load I type and U,J type
 		TT18= CK && (inst2[6:0]==7'b0100011) ; //S type and U,J type
-		if (TT1||TT4||TT5||TT6||TT9||TT10||TT11||TT12||TT13||TT14||TT16||TT18) begin
+		TT19= CK && (inst2[6:0]==7'b1100111) ; //JALR and U,J type 
+		TT20= (inst2[6:0]==7'b1100011) && (inst4[6:0]==7'b0000011) ;// B type and Load I type 
+		TT21= (inst2[6:0]==7'b0000011) && (inst4[6:0]==7'b0000011) ;// Load then load
+		if ((TT1||TT4||TT5||TT6||TT9||TT10||TT11||TT12||TT13||TT14||TT16||TT18||TT20)&&zero_check_2) begin
 			if ((inst4[11:7]==inst2[24:20]) && (cont2==2'b00))
 				cont2=2'b10;
 			if ((inst4[11:7]==inst2[19:15]) && (cont1==2'b00))
 				cont1=2'b10;
 		end
-		else if (TT2||TT3||TT7||TT8||TT15||TT17) begin
+		else if ((TT2||TT3||TT7||TT8||TT15||TT17||TT19||TT21)&&zero_check_2) begin
 			if ((inst4[11:7]==inst2[19:15])&& (cont1==2'b00))
 				cont1=2'b10;
 		end
