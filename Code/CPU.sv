@@ -1,5 +1,4 @@
 `include "processor_specific_macros.h"
-`timescale 1ps/1ps
 module CPU 
 #(
 	parameter PROGRAM_INST = "",

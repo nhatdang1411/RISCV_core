@@ -57,7 +57,7 @@ module BF_neural_predictor
 	wire [6:1] weight_update;  //output of reg
 	wire [2:1] weight_update_2; //output of update component
 
-	Bias_weight_table Bias_weight_table ( .weight(weight), .index(PC_in[10:1]), .index_update(PC_in_update[10:1]), .weight_update(weight_update_2), .en_1(en_1|en_2), .clk(clk));
+	Bias_weight_table Bias_weight_table ( .weight(weight), .index(PC_in[10:1]), .index_update(PC_in_update[10:1]), .weight_update(weight_update_2), .en_1(en_1|en_2), .clk(clk), .RST(rst));
 
 	Sr_Bias_weight Sr_Bias_weight ( .weight_update(weight_update), .weight(weight), .clk(clk), .rst(rst), .stall(stall));
 
@@ -69,7 +69,7 @@ module BF_neural_predictor
         wire [160:1] perceptron_address;
 
 	
-	Perceptron_table Perceptron_table ( .perceptron_weights(perceptron_weights), .index(perceptron_address), .index_update(perceptron_address_update[160:1]), .perceptron_weights_update (perceptron_weights_update_2), .clk(clk), .en_1(en_1|en_2));
+	Perceptron_table Perceptron_table ( .perceptron_weights(perceptron_weights), .index(perceptron_address), .index_update(perceptron_address_update[160:1]), .perceptron_weights_update (perceptron_weights_update_2), .clk(clk), .en_1(en_1|en_2), .RST(rst));
 
 	Sr_perceptron_address Sr_perceptron_address (.perceptron_address_update(perceptron_address_update), .perceptron_address(perceptron_address), .clk(clk), .rst(rst), .stall(stall));
 
@@ -83,7 +83,7 @@ module BF_neural_predictor
 	wire [432:1] perceptron_weights_update_BF; //output of reg
 	wire [144:1] perceptron_weights_update_BF_2; //output of update component
 
-	Perceptron_table_BF Perceptron_table_BF ( .perceptron_weights(perceptron_weights_BF) , .index(perceptron_address_BF), .index_update(perceptron_address_update_BF[768:1]), .perceptron_weights_update(perceptron_weights_update_BF_2), .clk(clk), .en_1(en_2));
+	Perceptron_table_BF Perceptron_table_BF ( .perceptron_weights(perceptron_weights_BF) , .index(perceptron_address_BF), .index_update(perceptron_address_update_BF[768:1]), .perceptron_weights_update(perceptron_weights_update_BF_2), .clk(clk), .en_1(en_2), .RST(rst));
 
 	Sr_perceptron_address_BF Sr_perceptron_address_BF ( .perceptron_address_update(perceptron_address_update_BF), .perceptron_address(perceptron_address_BF), .clk(clk), .rst(rst), .stall(stall));
 

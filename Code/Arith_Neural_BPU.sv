@@ -22,14 +22,6 @@ module Branch_status_table #(parameter BST_length = 16383)
 	assign PC_index = PC_in [14:1];
 	assign PC_index_update = PC_update [14:1];
 
-	//Initialize
-	initial begin
-		for ( int i=1; i <= BST_length; i=i+1) begin
-			status_bits[i] <= 0;
-			PC_predict[i] <= 0;
-			PC[i]=0;
-		end
-	end
 
 	//Prediction
 	always_ff @(posedge clk) begin
@@ -222,18 +214,12 @@ module Bias_weight_table #(parameter Bias_length = 1023)
 
 	(*anyseq*) input wire [10:1] index, index_update,
 	input wire [2:1] weight_update,
-	input wire en_1,
+	input wire en_1, RST,
 	input wire clk
 );
 	//Internal memory
 	reg [2:1] bias_table [Bias_length:0];
 
-	//Simulate
-	initial begin
-		for (int i = 0; i <= Bias_length; i=i+1) begin
-			 bias_table [i] <= 0;
-		end
-	end
 
 	//Prediction
 	always_ff @(posedge clk) begin
@@ -242,6 +228,17 @@ module Bias_weight_table #(parameter Bias_length = 1023)
 	end
 	//Update
 	always_ff @(posedge clk) begin
+		if (RST == 1) begin
+			for (int i = 0; i <= Bias_length; i=i+1) begin
+				bias_table [i] <= 0;
+			end
+		end
+		else begin
+			for (int i = 0; i <= Bias_length; i=i+1) begin
+				bias_table [i] <= bias_table [i] ;
+			end
+		
+		end
 		if (en_1 == 1)
 			bias_table [index_update] <= weight_update;
 	       	else
@@ -451,17 +448,9 @@ module Perceptron_table #(parameter Perceptron_table_length = 1023)
 
 	(* anyseq *)input wire [160:1] index, index_update,
 	(* anyseq *)input wire [48:1] perceptron_weights_update,
-	input clk, en_1
+	input clk, en_1, RST
 );
 	reg [48:1] perceptron_table [Perceptron_table_length:0];
-
-
-	//Initialize
-	initial begin
-		for (int i=0; i<=Perceptron_table_length; i=i+1) begin
-			perceptron_table[i]<=0;
-		end
-	end
 
 	//Prediction
 	always_ff @(posedge clk) begin
@@ -471,14 +460,23 @@ module Perceptron_table #(parameter Perceptron_table_length = 1023)
 	end
 	//Update
 	always_ff @(posedge clk) begin
-		if (en_1==1)
-			for (int i=1; i<=16; i=i+1) begin
-				perceptron_table [index_update[10*(i-1)+1+:10]] [3*(i-1)+1+:3] <= perceptron_weights_update [3*(i-1)+1+:3];
+		if (RST==1) begin
+			for (int i=0; i<=Perceptron_table_length; i=i+1) begin
+				perceptron_table[i]<=0;
 			end
-		else
-			for (int i=1; i<=16; i=i+1) begin
-                                perceptron_table [index_update[10*(i-1)+1+:10]] [3*(i-1)+1+:3] <= perceptron_table [index_update[10*(i-1)+1+:10]] [3*(i-1)+1+:3] ;
-                        end
+		end
+		else begin
+			if (en_1==1) begin
+				for (int i=1; i<=16; i=i+1) begin
+					perceptron_table [index_update[10*(i-1)+1+:10]] [3*(i-1)+1+:3] <= perceptron_weights_update [3*(i-1)+1+:3];
+				end
+			end
+			else begin
+				for (int i=1; i<=16; i=i+1) begin
+                                	perceptron_table [index_update[10*(i-1)+1+:10]] [3*(i-1)+1+:3] <= perceptron_table [index_update[10*(i-1)+1+:10]] [3*(i-1)+1+:3] ;
+                        	end
+			end
+		end
 	end
 
 	`ifdef FORMAL
@@ -564,16 +562,9 @@ module Perceptron_table_BF #(parameter Perceptron_table_length = 65535)
 
 	input wire [768:1] index, index_update,
 	input wire [144:1] perceptron_weights_update,
-	input wire clk, en_1
+	input wire clk, en_1, RST
 );
 	reg [3:1] perceptron_table_BF [Perceptron_table_length:0];
-
-	//Initialize
-        initial begin
-                for (int i=0; i<=Perceptron_table_length; i=i+1) begin
-                        perceptron_table_BF[i]<=0;
-                end
-        end
 
 	//Prediction
 	always_ff @(posedge clk) begin
@@ -585,14 +576,23 @@ module Perceptron_table_BF #(parameter Perceptron_table_length = 65535)
 	//Update
 
 	always_ff @(posedge clk) begin
-                if (en_1==1)
-                        for (int i=1; i<=48; i=i+1) begin
-                                perceptron_table_BF [index_update[16*(i-1)+1+:16]]  = perceptron_weights_update [3*(i-1)+1+:3];
-                        end
-                else
-                        for (int i=1; i<=48; i=i+1) begin
-                                perceptron_table_BF [index_update[16*(i-1)+1+:16]]  <= perceptron_table_BF [index_update[16*(i-1)+1+:16]] ;
-                        end;
+		if (RST==1) begin
+			for (int i=0; i<=Perceptron_table_length; i=i+1) begin
+                       		perceptron_table_BF[i]<=0;
+                	end
+		end
+		else begin
+			if (en_1==1) begin
+                        	for (int i=1; i<=48; i=i+1) begin
+                                	perceptron_table_BF [index_update[16*(i-1)+1+:16]]  = perceptron_weights_update [3*(i-1)+1+:3];
+                       		end
+			end
+                	else begin
+                        	for (int i=1; i<=48; i=i+1) begin
+                                	perceptron_table_BF [index_update[16*(i-1)+1+:16]]  <= perceptron_table_BF [index_update[16*(i-1)+1+:16]] ;
+                       		end
+			end
+		end
         end
 	`ifdef FORMAL
 		logic f_valid = 1'b0;
